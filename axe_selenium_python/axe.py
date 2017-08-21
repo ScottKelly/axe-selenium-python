@@ -5,6 +5,15 @@
 import json
 import os
 
+
+from jinja2 import Environment, PackageLoader, select_autoescape
+env = Environment(
+    loader=PackageLoader('axe_selenium_python', 'templates'),
+    autoescape=select_autoescape(['html'])
+)
+
+
+
 _DEFAULT_SCRIPT = os.path.join(os.path.dirname(__file__), 'src', 'axe.min.js')
 
 
@@ -105,3 +114,8 @@ class Axe(object):
         """
         with open(name, 'w+') as f:
             f.write(json.dumps(output, indent=4))
+
+    def write_html(self, name, output):
+        template = env.get_template('accessibility.html')
+        with open(name, 'w+') as f:
+            f.write(template.render(violations=output))
