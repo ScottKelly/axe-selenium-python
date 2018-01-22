@@ -48,34 +48,32 @@ To install pytest-axe:
 
   $ pip install pytest-axe
 
-
 Usage
 ------
-*test_accessibility.py*
+``test_accessibility.py``
 
 .. code-block:: python
 
    import pytest
 
     @pytest.mark.nondestructive
-    def test_header_accessibility(selenium, base_url, axe):
-        selenium.get(base_url)
+    def test_header_accessibility(axe):
         violations = axe.run('header', None, 'critical')
         assert len(violations) == 0, axe.report(violations)
 
 
 
-The above example runs aXe against only the content within the *<header>* tag, and filters for violations labeled **critical**.
+The above example runs aXe against only the content within the *<header>* tag, and filters for violations labeled ``critical``.
 
-The method **axe.run()** accepts three parameters: **context**, **options**, and
-**impact**.
+The method ``axe.run()`` accepts three parameters: ``context``, ``options``, and
+``impact``.
 
-For more information on **context** and **options**, view the `aXe
+For more information on ``context`` and ``options``, view the `aXe
 documentation here <https://github.com/dequelabs/axe-core/blob/master/doc/API.md#parameters-axerun>`_.
 
-The third parameter, **impact**, allows you to filter violations by their impact
-level. The options are **critical**, **severe**, **moderate**, and **minor**, with the
-default value set to **None**.
+The third parameter, ``impact``, allows you to filter violations by their impact
+level. The options are ``'critical'``, ``'serious'`` and ``'minor'``, with the
+default value set to ``None``.
 
 This will filter violations for the impact level specified, and **all violations with a higher impact level**.
 

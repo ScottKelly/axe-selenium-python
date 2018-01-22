@@ -1,8 +1,20 @@
 CHANGELOG
----------
+^^^^^^^^^^^^^^
+
+version 1.2.1
+**************
+- Updated axe.min.js to latest version of axe-core
+- Modified impact_included class method to reflect changes to the aXe API:
+- There are now only 3 impact levels: 'critical', 'serious', and 'minor'
+
+version 1.0.0
+**************
+- Updated usage examples in README
+- Added docstrings to methods lacking documentation
+- Removed unused files
 
 version 0.0.3
-****************
+**************
 - Added run method to Axe class to simplify the usage in existing test suites
 - run method includes the ability to set what impact level to test for: 'minor', 'moderate', 'severe', 'critical'
 

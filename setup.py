@@ -15,13 +15,13 @@ def readme():
 
 
 setup(name='axe-selenium-python',
-      version='0.0.450',
+      version='1.2.2',
       description='Python library to integrate axe and selenium for web \
                 accessibility testing.',
       long_description=readme(),
       url='http://github.com/kimberlythegeek/axe-selenium-python',
-      author='Kimberly Pennington',
-      author_email='kpennington@mozilla.com',
+      author='Kimberly Sereduck',
+      author_email='ksereduck@mozilla.com',
       packages=find_packages(),
       package_data={'axe_selenium_python': ['src/axe.min.js'], },
       install_requires=[

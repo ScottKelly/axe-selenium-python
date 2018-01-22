@@ -65,16 +65,13 @@ class Axe(object):
 
     def impact_included(self, rule, impact):
         """
-        Function to filter for violations iwht specified impact level, and all
+        Function to filter for violations with specified impact level, and all
         violations with a higher impact level.
         """
         if impact == 'minor' or impact is None:
             return True
-        elif impact == 'moderate':
+        elif impact == 'serious':
             if rule['impact'] != 'minor':
-                return True
-        elif impact == 'severe':
-            if rule['impact'] == 'severe' or rule['impact'] == 'critical':
                 return True
         elif impact == 'critical':
             if rule['impact'] == 'critical':
@@ -93,7 +90,7 @@ class Axe(object):
         """
         string = ''
         string += 'Found ' + str(len(violations)) + ' accessibility violations:'
-        for violation, rule in violations.iteritems():
+        for violation, rule in violations.items():
             string += '\n\n\nRule Violated:\n' + rule['id'] + ' - ' + rule['description'] + \
                 '\n\tURL: ' + rule['helpUrl'] + \
                 '\n\tImpact Level: ' + rule['impact'] + \
