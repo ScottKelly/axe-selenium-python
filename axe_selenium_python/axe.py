@@ -2,10 +2,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from os import path
 import json
-import os
 
-_DEFAULT_SCRIPT = os.path.join(os.path.dirname(__file__), 'src', 'axe.min.js')
+_DEFAULT_SCRIPT = path.join(path.dirname(__file__), 'src', 'axe.min.js')
 
 
 class Axe(object):
@@ -24,16 +24,11 @@ class Axe(object):
         with open(self.script_url) as f:
             self.selenium.execute_script(f.read())
 
-    def get_rules(self):
-        """Return array of accessibility rules."""
-        response = self.selenium.execute_script('return axe.getRules();')
-        return response
-
     def execute(self, context=None, options=None):
         """
         Run axe against the current page.
 
-        :param context: which part of the page to analyze and/or what to exclude.
+        :param context: which page part(s) to analyze and/or what to exclude.
         :param options: dictionary of aXe options.
         """
         template = 'return axe.run(%s).then(arguments[arguments.length - 1]);'
@@ -53,32 +48,6 @@ class Axe(object):
         response = self.selenium.execute_async_script(command)
         return response
 
-    def run(self, context=None, options=None, impact=None):
-        """
-        Inject aXe, run against current page, and return rules & violations.
-        """
-        self.inject()
-        data = self.execute(context, options)
-        violations = dict((rule['id'], rule) for rule in data['violations'] if self.impact_included(rule, impact))
-
-        return violations
-
-    def impact_included(self, rule, impact):
-        """
-        Function to filter for violations with specified impact level, and all
-        violations with a higher impact level.
-        """
-        if impact == 'minor' or impact is None:
-            return True
-        elif impact == 'serious':
-            if rule['impact'] != 'minor':
-                return True
-        elif impact == 'critical':
-            if rule['impact'] == 'critical':
-                return True
-        else:
-            return False
-
     def report(self, violations):
         """
         Return readable report of accessibility violations found.
@@ -90,16 +59,16 @@ class Axe(object):
         """
         string = ''
         string += 'Found ' + str(len(violations)) + ' accessibility violations:'
-        for violation, rule in violations.items():
-            string += '\n\n\nRule Violated:\n' + rule['id'] + ' - ' + rule['description'] + \
-                '\n\tURL: ' + rule['helpUrl'] + \
-                '\n\tImpact Level: ' + rule['impact'] + \
+        for violation in violations:
+            string += '\n\n\nRule Violated:\n' + violation['id'] + ' - ' + violation['description'] + \
+                '\n\tURL: ' + violation['helpUrl'] + \
+                '\n\tImpact Level: ' + violation['impact'] + \
                 '\n\tTags:'
-            for tag in rule['tags']:
+            for tag in violation['tags']:
                 string += ' ' + tag
             string += '\n\tElements Affected:'
             i = 1
-            for node in rule['nodes']:
+            for node in violation['nodes']:
                 for target in node['target']:
                     string += '\n\t' + str(i) + ') Target: ' + target
                     i += 1
@@ -110,7 +79,6 @@ class Axe(object):
                 for item in node['none']:
                     string += '\n\t\t' + item['message']
             string += '\n\n\n'
-
         return string
 
     def write_results(self, name, output):

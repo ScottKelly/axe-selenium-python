@@ -4,16 +4,18 @@
 
 import os
 from datetime import datetime
-from py.xml import html
-from axe_selenium_python import Axe
+
 import pytest
+from py.xml import html
+
+from axe_selenium_python import Axe
 
 _DEFAULT_SCRIPT = os.path.join(os.path.dirname(__file__), 'src', 'axe.min.js')
 
 
 @pytest.fixture
 def script_url():
-    """Return a script URL"""
+    """Return a script URL."""
     return _DEFAULT_SCRIPT
 
 
@@ -40,7 +42,7 @@ def pytest_html_results_table_row(report, cells):
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item, call):
-    """Make HTML report. Use test function docstrings as description in report."""
+    """Make HTML report using test-function docstrings as description."""
     outcome = yield
     report = outcome.get_result()
     # add docstring to 'description' column
